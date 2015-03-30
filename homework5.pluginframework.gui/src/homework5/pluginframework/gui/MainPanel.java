@@ -30,6 +30,9 @@ public class MainPanel extends JPanel{
 		this.mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		this.mainPanel.setBackground(this.panelColor);
 		
+		// add main panel to main frame
+		this.mainFrame.add(this.mainPanel);
+		
 		// Set up other panels and add them to main panel 
 		this.listPanel = new ListingPanel("Plugins", new Dimension(200,500));
 		this.execPanel = new ExecutionPanel("Display", new Dimension(400,500));
@@ -40,8 +43,7 @@ public class MainPanel extends JPanel{
 		this.mainPanel.add(this.execPanel,BorderLayout.CENTER);
 		this.mainPanel.add(this.statusPanel,BorderLayout.PAGE_END);
 		
-		// add main panel to main frame
-		this.mainFrame.add(this.mainPanel);
+		
 	}
 	
 	public static void main (String [] args){
