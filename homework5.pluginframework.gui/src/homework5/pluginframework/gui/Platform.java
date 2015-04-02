@@ -59,7 +59,7 @@ public class Platform {
 				try {
 					URL url = file.toURI().toURL();
 					URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-					Class loadedClass = cl.loadClass("test.testDisplay");
+					Class loadedClass = cl.loadClass("test.Test");
 					Display plugin = (Display) loadedClass.newInstance();
 					mainPanel.addPlugin(plugin);
 				} catch (Exception e) {

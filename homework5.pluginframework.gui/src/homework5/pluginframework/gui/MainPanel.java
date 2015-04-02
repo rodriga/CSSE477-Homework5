@@ -7,14 +7,17 @@ import java.util.ArrayList;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel{
 
 	private JFrame mainFrame;
-	private JPanel mainPanel;
+	public JPanel mainPanel;
 	private ListingPanel listPanel;
 	private ExecutionPanel execPanel;
 	private StatusPanel statusPanel;
@@ -52,7 +55,36 @@ public class MainPanel extends JPanel{
 	public void addPlugin(Display plugin)
 	{
 		this.plugins.add(plugin);
-		addComponent(plugin.getComponent());
+		this.listPanel.addPlugin(plugin);
+		JList<Object> pluginList = this.listPanel.getPluginList();
+		pluginList.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent evt) {
+				boolean adjust = evt.getValueIsAdjusting();
+				if (!adjust) {
+
+					JList list = (JList) evt.getSource();
+					int selections[] = list.getSelectedIndices();
+					Object[] selectionValues = list.getSelectedValues();
+					for (int i = 0, n = selections.length; i < n; i++) {
+						if(selections[i]==2){
+							addComponent(plugin.getComponent());
+							repaint();
+						}else{
+							System.out.println("noo");
+						}
+						
+					}
+
+				}
+			}
+
+		});
+		
+		this.listPanel.add(pluginList);
+		
+		
 	}
 	
 	public void addComponent(JComponent comp)

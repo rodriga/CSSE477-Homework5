@@ -8,4 +8,5 @@ public interface Display {
 
 	<T> JComponent getComponent();
 	<T> JLabel getStatusMessage();
+	<T> String getName();
 }
