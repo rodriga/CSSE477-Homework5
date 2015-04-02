@@ -49,6 +49,7 @@ public class Platform {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void processFiles() {
 		mainPanel.postStatus("Platform", "Initializing plugin list");
 		File folder = new File(PLATFORM_DIRECTORY);
@@ -56,6 +57,7 @@ public class Platform {
 		for (File file : fileList) {
 			if (file.getName().endsWith(".jar")) {
 				try {
+					@SuppressWarnings("resource")
 					JarInputStream jarFile = new JarInputStream(
 							new FileInputStream(file.getAbsolutePath()));
 					JarEntry jarEntry;
@@ -72,7 +74,6 @@ public class Platform {
 									className.lastIndexOf('.'));
 							if (!isNativeClass(myClass))
 								extensionClassName = myClass;
-							//break;
 						}
 					}
 					URL url = file.toURI().toURL();
@@ -117,6 +118,7 @@ public class Platform {
 		keys.put(key, dir);
 	}
 
+	@SuppressWarnings({ "rawtypes", "resource" })
 	void processEvents() {
 		for (;;) {
 

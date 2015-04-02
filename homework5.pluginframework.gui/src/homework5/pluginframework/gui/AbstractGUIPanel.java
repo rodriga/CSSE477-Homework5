@@ -24,7 +24,7 @@ public abstract class AbstractGUIPanel extends JPanel {
 
 	}
 
-	private JLabel createTitle(String titleName) {
+	public JLabel createTitle(String titleName) {
 		this.title = new JLabel();
 		this.title.setFont(new Font("Helvetica", Font.BOLD, 20));
 		this.title.setText(titleName);
@@ -32,5 +32,9 @@ public abstract class AbstractGUIPanel extends JPanel {
 		this.title.setBackground(this.titlebgColor);
 		this.title.setForeground(this.titlefgColor);
 		return title;
+	}
+	
+	public String getTitle(){
+		return this.title.getText();
 	}
 }
