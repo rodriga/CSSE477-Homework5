@@ -10,5 +10,6 @@ public interface Display {
 	<T> String getName();
 	<T> String getInitializingMessage();
 	<T> String getExecutingMessage();
+	<T> String getPluginRemovalMessage();
 
 }

@@ -53,7 +53,7 @@ public class MainPanel extends JPanel {
 	}
 
 	public void addPlugin(Display plugin) {
-		postStatus(plugin.getInitializingMessage());
+		postStatus(plugin.getName(), plugin.getInitializingMessage());
 		// TODO: Add to list Panel
 		this.plugins.add(plugin);
 		this.listPanel.addPlugin(plugin);
@@ -90,14 +90,14 @@ public class MainPanel extends JPanel {
 	}
 
 	public void executePlugin(Display plugin) {
-		postStatus(plugin.getExecutingMessage());
+		postStatus(plugin.getName(), plugin.getExecutingMessage());
 		this.execPanel.add(plugin.getComponent());
 
 		repaintAll();
 	}
 
-	public void postStatus(String post) {
-		this.statusPanel.postMessage(post);
+	public void postStatus(String sender, String post) {
+		this.statusPanel.postMessage(sender + ": " + post);
 		repaintAll();
 	}
 

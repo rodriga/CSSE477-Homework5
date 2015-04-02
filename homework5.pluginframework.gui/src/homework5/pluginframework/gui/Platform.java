@@ -50,7 +50,7 @@ public class Platform {
 	}
 
 	private void processFiles() {
-		mainPanel.postStatus("PLATFORM: Initializing plugin list");
+		mainPanel.postStatus("Platform", "Initializing plugin list");
 		File folder = new File(PLATFORM_DIRECTORY);
 		File[] fileList = folder.listFiles();
 		for (File file : fileList) {
@@ -169,7 +169,7 @@ public class Platform {
 						}
 
 						URL url = child.toUri().toURL();
-						mainPanel.postStatus("PLATFORM: Detected new plugin.");
+						mainPanel.postStatus("Platform", "Detected new plugin.");
 						URLClassLoader cl = URLClassLoader
 								.newInstance(new URL[] { url });
 						Class loadedClass = cl.loadClass(extensionClassName);
