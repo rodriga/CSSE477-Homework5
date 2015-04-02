@@ -58,12 +58,11 @@ public class Platform {
 			if (file.getName().endsWith(".jar"))
 			{
 				try {
-					URL url;
-					url = file.toURI().toURL();
+					URL url = file.toURI().toURL();
 					URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-					Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
-					Constructor cons = loadedClass.getConstructor();
-					Display plugin = (Display) cons.newInstance();
+					Class loadedClass = cl.loadClass("test.testDisplay");
+					Display plugin = (Display) loadedClass.newInstance();
+					plugin.drawDisplay();
 					addPlugin(plugin);
 				} catch (Exception e) {
 					e.printStackTrace();
