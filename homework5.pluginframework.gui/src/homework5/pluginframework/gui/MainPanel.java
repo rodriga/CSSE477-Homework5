@@ -21,10 +21,8 @@ public class MainPanel extends JPanel{
 	public MainPanel(){
 		//set up main frame
 		this.mainFrame = new JFrame("RAJ Plugin Framework");
-		this.mainFrame.setVisible(true);
 		this.mainFrame.setSize(1200,800);
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.mainFrame.setBackground(Color.BLACK);
 		
 		//set up main panel
 		this.mainPanel = new JPanel();
@@ -43,5 +41,7 @@ public class MainPanel extends JPanel{
 		this.mainPanel.add(this.listPanel, BorderLayout.LINE_START);
 		this.mainPanel.add(this.execPanel,BorderLayout.CENTER);
 		this.mainPanel.add(this.statusPanel,BorderLayout.PAGE_END);	
+
+		this.mainFrame.setVisible(true);
 	}
 }
