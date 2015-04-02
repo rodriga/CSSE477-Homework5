@@ -25,7 +25,6 @@ public class Platform {
 	
 	private final WatchService watcher;
     private final Map<WatchKey,Path> keys;
-    private ArrayList<Display> plugins;
     private MainPanel mainPanel;
 
 	public static void main(String[] args) {
@@ -45,9 +44,9 @@ public class Platform {
         this.keys = new HashMap<WatchKey,Path>();
 
         mainPanel = new MainPanel();
-		plugins = new ArrayList<Display>();
 		processFiles();
         register(dir);
+        
     }
     
     private void processFiles() {
@@ -62,18 +61,12 @@ public class Platform {
 					URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
 					Class loadedClass = cl.loadClass("test.testDisplay");
 					Display plugin = (Display) loadedClass.newInstance();
-					plugin.drawDisplay();
-					addPlugin(plugin);
+					mainPanel.addPlugin(plugin);
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 
 			}
 		}
-    }
-    
-    private void addPlugin(Display plugin)
-    {
-		plugins.add(plugin);    	
     }
 	
     @SuppressWarnings("unchecked")
@@ -120,7 +113,7 @@ public class Platform {
 						URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
 						Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
 						Display plugin = (Display) loadedClass.newInstance();
-						plugins.add(plugin);
+						mainPanel.addPlugin(plugin);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

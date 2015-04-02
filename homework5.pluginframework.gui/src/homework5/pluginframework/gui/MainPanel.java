@@ -3,7 +3,9 @@ package homework5.pluginframework.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,6 +19,7 @@ public class MainPanel extends JPanel{
 	private ExecutionPanel execPanel;
 	private StatusPanel statusPanel;
 	private Color panelColor = new Color(0xE6E6E6);
+    private ArrayList<Display> plugins;
 	
 	public MainPanel(){
 		//set up main frame
@@ -43,5 +46,18 @@ public class MainPanel extends JPanel{
 		this.mainPanel.add(this.statusPanel,BorderLayout.PAGE_END);	
 
 		this.mainFrame.setVisible(true);
+		plugins = new ArrayList<Display>();
+	}
+	
+	public void addPlugin(Display plugin)
+	{
+		this.plugins.add(plugin);
+		addComponent(plugin.getComponent());
+	}
+	
+	public void addComponent(JComponent comp)
+	{
+		this.execPanel.add(comp);
+		repaint();
 	}
 }

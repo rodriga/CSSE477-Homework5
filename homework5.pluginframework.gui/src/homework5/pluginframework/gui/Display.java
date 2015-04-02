@@ -1,7 +1,11 @@
 package homework5.pluginframework.gui;
 
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
 
 public interface Display {
 
-	<T> void drawDisplay(); 
+	<T> JComponent getComponent();
+	<T> JLabel getStatusMessage();
 }
