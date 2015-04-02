@@ -28,8 +28,6 @@ public class Platform {
     private MainPanel mainPanel;
 
 	public static void main(String[] args) {
-		System.out.println("Hello Platform!");
-		
 		try {
 			Path dir = Paths.get(PLATFORM_DIRECTORY);
 			Platform platform = new Platform(dir);
@@ -50,6 +48,7 @@ public class Platform {
     }
     
     private void processFiles() {
+    	mainPanel.postStatus("PLATFORM: Initializing plugin list");
     	File folder  = new File(PLATFORM_DIRECTORY);
 		File[] fileList = folder.listFiles();
 		for (File file : fileList)
@@ -107,11 +106,13 @@ public class Platform {
                 Path name = ev.context();
                 Path child = dir.resolve(name);
                 
-                if (kind == ENTRY_CREATE && child.endsWith("jar")) {
+                if (kind == ENTRY_CREATE 
+                		&& child.toFile().getName().endsWith(".jar")) {
 					try {
 						URL url = child.toUri().toURL();
+				    	mainPanel.postStatus("PLATFORM: Detected new plugin.");
 						URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-						Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
+						Class loadedClass = cl.loadClass("test.testDisplay");
 						Display plugin = (Display) loadedClass.newInstance();
 						mainPanel.addPlugin(plugin);
 					} catch (Exception e) {
