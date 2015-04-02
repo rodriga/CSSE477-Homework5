@@ -6,8 +6,8 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.FileSystems;
@@ -19,6 +19,8 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 public class Platform {
 	private final static String PLATFORM_DIRECTORY = "C:/";
@@ -28,8 +30,6 @@ public class Platform {
     private MainPanel mainPanel;
 
 	public static void main(String[] args) {
-		System.out.println("Hello Platform!");
-		
 		try {
 			Path dir = Paths.get(PLATFORM_DIRECTORY);
 			Platform platform = new Platform(dir);
@@ -50,6 +50,7 @@ public class Platform {
     }
     
     private void processFiles() {
+    	mainPanel.postStatus("PLATFORM: Initializing plugin list");
     	File folder  = new File(PLATFORM_DIRECTORY);
 		File[] fileList = folder.listFiles();
 		for (File file : fileList)
@@ -57,9 +58,28 @@ public class Platform {
 			if (file.getName().endsWith(".jar"))
 			{
 				try {
+					JarInputStream jarFile = new JarInputStream(new FileInputStream(file.getAbsolutePath()));
+					JarEntry jarEntry;
+					String extensionClassName = "";
+					while (true) {
+						jarEntry = jarFile.getNextJarEntry();
+						if (jarEntry == null) {
+							break;
+						}
+						if ((jarEntry.getName().endsWith(".class"))) {
+							String className = jarEntry.getName().replaceAll("/", "\\.");
+							String myClass = className.substring(0, className.lastIndexOf('.'));
+							if(!isNativeClass(myClass))
+								extensionClassName = myClass;
+						}
+					}
 					URL url = file.toURI().toURL();
 					URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-					Class loadedClass = cl.loadClass("test.Test");
+
+					
+
+					Class loadedClass = cl.loadClass(extensionClassName);
+
 					Display plugin = (Display) loadedClass.newInstance();
 					mainPanel.addPlugin(plugin);
 				} catch (Exception e) {
@@ -67,6 +87,19 @@ public class Platform {
 				} 
 			}
 		}
+    }
+    
+    private boolean isNativeClass(String className)
+    {
+    	ArrayList<String> classes = new ArrayList<String>();
+    	classes.add("homework5.pluginframework.gui.Display");
+    	classes.add("homework5.pluginframework.gui.StatusPanel");
+    	classes.add("homework5.pluginframework.gui.ExecutionPanel");
+    	classes.add("homework5.pluginframework.gui.AbstractGUIPanel");
+    	classes.add("homework5.pluginframework.gui.MainPanel");
+    	classes.add("homework5.pluginframework.gui.ListingPanel");
+    	classes.add("homework5.pluginframework.gui.Platform");
+    	return classes.contains(className);
     }
 	
     @SuppressWarnings("unchecked")
@@ -107,11 +140,29 @@ public class Platform {
                 Path name = ev.context();
                 Path child = dir.resolve(name);
                 
-                if (kind == ENTRY_CREATE && child.endsWith("jar")) {
+                if (kind == ENTRY_CREATE 
+                		&& child.toFile().getName().endsWith(".jar")) {
 					try {
+						JarInputStream jarFile = new JarInputStream(new FileInputStream(child.toFile().getAbsolutePath()));
+						JarEntry jarEntry;
+						String extensionClassName = "";
+						while (true) {
+							jarEntry = jarFile.getNextJarEntry();
+							if (jarEntry == null) {
+								break;
+							}
+							if ((jarEntry.getName().endsWith(".class"))) {
+								String className = jarEntry.getName().replaceAll("/", "\\.");
+								String myClass = className.substring(0, className.lastIndexOf('.'));
+								if(!isNativeClass(myClass))
+									extensionClassName = myClass;
+							}
+						}
+						
 						URL url = child.toUri().toURL();
+				    	mainPanel.postStatus("PLATFORM: Detected new plugin.");
 						URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-						Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
+						Class loadedClass = cl.loadClass(extensionClassName);
 						Display plugin = (Display) loadedClass.newInstance();
 						mainPanel.addPlugin(plugin);
 					} catch (Exception e) {

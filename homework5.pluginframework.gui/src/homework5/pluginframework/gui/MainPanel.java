@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -54,6 +53,8 @@ public class MainPanel extends JPanel{
 	
 	public void addPlugin(Display plugin)
 	{
+		postStatus(plugin.getInitializingMessage());
+		//TODO: Add to list Panel
 		this.plugins.add(plugin);
 		this.listPanel.addPlugin(plugin);
 		JList<Object> pluginList = this.listPanel.getPluginList();
@@ -69,7 +70,7 @@ public class MainPanel extends JPanel{
 					Object[] selectionValues = list.getSelectedValues();
 					for (int i = 0, n = selections.length; i < n; i++) {
 						if(selections[i]==2){
-							addComponent(plugin.getComponent());
+							executePlugin(plugin);
 							repaint();
 						}else{
 							System.out.println("noo");
@@ -83,13 +84,35 @@ public class MainPanel extends JPanel{
 		});
 		
 		this.listPanel.add(pluginList);
+	
+		repaintAll();
 		
-		
+		//Delete this once the listener on the list panel is complete.
+		executePlugin(plugin);
 	}
 	
-	public void addComponent(JComponent comp)
+	public void executePlugin(Display plugin)
 	{
-		this.execPanel.add(comp);
-		repaint();
+		postStatus(plugin.getExecutingMessage());
+		this.execPanel.add(plugin.getComponent());
+		
+		repaintAll();
+	}
+	
+	public void postStatus(String post)
+	{
+		this.statusPanel.postMessage(post);
+		repaintAll();
+	}
+	
+	private void repaintAll()
+	{
+		this.statusPanel.repaint();
+		this.execPanel.repaint();
+		this.listPanel.repaint();
+		this.mainPanel.repaint();
+		this.mainPanel.revalidate();
+		this.mainFrame.repaint();
+		this.repaint();
 	}
 }
