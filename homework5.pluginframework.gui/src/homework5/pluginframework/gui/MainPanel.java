@@ -13,7 +13,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
-public class MainPanel extends JPanel{
+public class MainPanel extends JPanel {
 
 	private JFrame mainFrame;
 	public JPanel mainPanel;
@@ -21,40 +21,40 @@ public class MainPanel extends JPanel{
 	private ExecutionPanel execPanel;
 	private StatusPanel statusPanel;
 	private Color panelColor = new Color(0xE6E6E6);
-    private ArrayList<Display> plugins;
-	
-	public MainPanel(){
-		//set up main frame
+	private ArrayList<Display> plugins;
+
+	public MainPanel() {
+		// set up main frame
 		this.mainFrame = new JFrame("RAJ Plugin Framework");
-		this.mainFrame.setSize(1200,800);
+		this.mainFrame.setSize(1200, 800);
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		//set up main panel
+
+		// set up main panel
 		this.mainPanel = new JPanel();
 		this.mainPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		this.mainPanel.setBackground(this.panelColor);
-		
+
 		// add main panel to main frame
 		this.mainFrame.add(this.mainPanel);
-		
-		// Set up other panels and add them to main panel 
-		this.listPanel = new ListingPanel("Plugins", new Dimension(200,500));
-		this.execPanel = new ExecutionPanel("Display", new Dimension(400,500));
-		this.statusPanel = new StatusPanel("Status Messages", new Dimension(600,100));
-		
-		this.mainPanel.setLayout(new BorderLayout(10,10));
+
+		// Set up other panels and add them to main panel
+		this.listPanel = new ListingPanel("Plugins", new Dimension(200, 500));
+		this.execPanel = new ExecutionPanel("Display", new Dimension(400, 500));
+		this.statusPanel = new StatusPanel("Status Messages", new Dimension(
+				600, 100));
+
+		this.mainPanel.setLayout(new BorderLayout(10, 10));
 		this.mainPanel.add(this.listPanel, BorderLayout.LINE_START);
-		this.mainPanel.add(this.execPanel,BorderLayout.CENTER);
-		this.mainPanel.add(this.statusPanel,BorderLayout.PAGE_END);	
+		this.mainPanel.add(this.execPanel, BorderLayout.CENTER);
+		this.mainPanel.add(this.statusPanel, BorderLayout.PAGE_END);
 
 		this.mainFrame.setVisible(true);
 		plugins = new ArrayList<Display>();
 	}
-	
-	public void addPlugin(Display plugin)
-	{
+
+	public void addPlugin(Display plugin) {
 		postStatus(plugin.getInitializingMessage());
-		//TODO: Add to list Panel
+		// TODO: Add to list Panel
 		this.plugins.add(plugin);
 		this.listPanel.addPlugin(plugin);
 		JList<Object> pluginList = this.listPanel.getPluginList();
@@ -65,48 +65,46 @@ public class MainPanel extends JPanel{
 				boolean adjust = evt.getValueIsAdjusting();
 				if (!adjust) {
 
-					JList list = (JList) evt.getSource();
-					int selections[] = list.getSelectedIndices();
-					Object[] selectionValues = list.getSelectedValues();
+					int selections[] = pluginList.getSelectedIndices();
 					for (int i = 0, n = selections.length; i < n; i++) {
-						if(selections[i]==2){
+						if (pluginList.getSelectedValue() == plugin.getName()) {
+							removePluginExecution();
 							executePlugin(plugin);
 							repaint();
-						}else{
-							System.out.println("noo");
+
 						}
-						
 					}
 
 				}
+
 			}
 
 		});
-		
+
 		this.listPanel.add(pluginList);
-	
+
 		repaintAll();
-		
-		//Delete this once the listener on the list panel is complete.
-		executePlugin(plugin);
 	}
-	
-	public void executePlugin(Display plugin)
-	{
+
+	public void removePluginExecution() {
+		// TODO Auto-generated method stub
+		this.execPanel.removeAll();
+		repaintAll();
+	}
+
+	public void executePlugin(Display plugin) {
 		postStatus(plugin.getExecutingMessage());
 		this.execPanel.add(plugin.getComponent());
-		
+
 		repaintAll();
 	}
-	
-	public void postStatus(String post)
-	{
+
+	public void postStatus(String post) {
 		this.statusPanel.postMessage(post);
 		repaintAll();
 	}
-	
-	private void repaintAll()
-	{
+
+	private void repaintAll() {
 		this.statusPanel.repaint();
 		this.execPanel.repaint();
 		this.listPanel.repaint();

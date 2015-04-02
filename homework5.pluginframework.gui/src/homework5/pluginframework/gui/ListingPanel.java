@@ -14,6 +14,8 @@ public class ListingPanel extends AbstractGUIPanel {
 	public ListingPanel(String title, Dimension preferredSize) {
 		super(title, preferredSize);
 		listModel = new DefaultListModel<Object>();
+		pluginList = new JList<>(listModel);
+		pluginList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	}
 
 	public JList<Object> getPluginList(){
@@ -21,18 +23,7 @@ public class ListingPanel extends AbstractGUIPanel {
 	}
 	
 	public void addPlugin(Display plugin) {
-		listModel.addElement("Plugin 1");
-		listModel.addElement("Plugin 2");
 		listModel.addElement(plugin.getName());
-		createPluginList();
-	}
-
-	private void createPluginList() {
-		pluginList = new JList<>(listModel);
-		pluginList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		pluginList.setSelectedIndex(0);
-
-		
 	}
 
 }
