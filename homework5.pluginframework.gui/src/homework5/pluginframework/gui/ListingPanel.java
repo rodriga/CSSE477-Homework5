@@ -1,6 +1,7 @@
 package homework5.pluginframework.gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -15,6 +16,7 @@ public class ListingPanel extends AbstractGUIPanel {
 		super(title, preferredSize);
 		listModel = new DefaultListModel<Object>();
 		pluginList = new JList<>(listModel);
+		pluginList.setFont(new Font("Helvetica", Font.BOLD, 14));
 		pluginList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 	}
 

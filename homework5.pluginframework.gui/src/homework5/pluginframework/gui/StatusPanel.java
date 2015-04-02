@@ -1,6 +1,7 @@
 package homework5.pluginframework.gui;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
@@ -19,7 +20,9 @@ public class StatusPanel extends AbstractGUIPanel {
 	
 	public void postMessage(String message)
 	{
-		posts.add(0, new JLabel(message));
+		JLabel statusMessage = new JLabel(message);
+		statusMessage.setFont(new Font("Helvetica", Font.BOLD, 14));
+		posts.add(0,statusMessage);
 		this.removeAll();
 		for (JLabel status : posts)
 		{
