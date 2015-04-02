@@ -70,8 +70,6 @@ public class MainPanel extends JPanel {
 						if (pluginList.getSelectedValue() == plugin.getName()) {
 							removePluginExecution();
 							executePlugin(plugin);
-							repaint();
-
 						}
 					}
 
@@ -87,7 +85,6 @@ public class MainPanel extends JPanel {
 	}
 
 	public void removePluginExecution() {
-		// TODO Auto-generated method stub
 		this.execPanel.removeAll();
 		repaintAll();
 	}

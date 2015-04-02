@@ -72,7 +72,7 @@ public class Platform {
 									className.lastIndexOf('.'));
 							if (!isNativeClass(myClass))
 								extensionClassName = myClass;
-							break;
+							//break;
 						}
 					}
 					URL url = file.toURI().toURL();
@@ -97,7 +97,13 @@ public class Platform {
 		classes.add("homework5.pluginframework.gui.MainPanel");
 		classes.add("homework5.pluginframework.gui.ListingPanel");
 		classes.add("homework5.pluginframework.gui.Platform");
-		return classes.contains(className);
+		
+		for (String nativeClass : classes)
+		{
+			if(className.contains(nativeClass))
+				return true;
+		}
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
