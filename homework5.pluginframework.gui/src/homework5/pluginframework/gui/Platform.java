@@ -7,6 +7,7 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.FileSystems;
@@ -24,7 +25,7 @@ public class Platform {
 	
 	private final WatchService watcher;
     private final Map<WatchKey,Path> keys;
-    private ArrayList<AbstractGUIPanel> plugins;
+    private ArrayList<Display> plugins;
     private MainPanel mainPanel;
 
 	public static void main(String[] args) {
@@ -44,7 +45,7 @@ public class Platform {
         this.keys = new HashMap<WatchKey,Path>();
 
         mainPanel = new MainPanel();
-		plugins = new ArrayList<AbstractGUIPanel>();
+		plugins = new ArrayList<Display>();
 		processFiles();
         register(dir);
     }
@@ -60,8 +61,9 @@ public class Platform {
 					URL url;
 					url = file.toURI().toURL();
 					URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-					Class loadedClass = cl.loadClass("homework5.pluginframework.gui.AbstractGUIPanel");
-					AbstractGUIPanel plugin = (AbstractGUIPanel) loadedClass.newInstance();
+					Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
+					Constructor cons = loadedClass.getConstructor();
+					Display plugin = (Display) cons.newInstance();
 					addPlugin(plugin);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +72,7 @@ public class Platform {
 		}
     }
     
-    private void addPlugin(AbstractGUIPanel plugin)
+    private void addPlugin(Display plugin)
     {
 		plugins.add(plugin);    	
     }
@@ -117,8 +119,8 @@ public class Platform {
 					try {
 						URL url = child.toUri().toURL();
 						URLClassLoader cl = URLClassLoader.newInstance(new URL[] { url });
-						Class loadedClass = cl.loadClass("homework5.pluginframework.gui.AbstractGUIPanel");
-						AbstractGUIPanel plugin = (AbstractGUIPanel) loadedClass.newInstance();
+						Class loadedClass = cl.loadClass("homework5.pluginframework.gui.Display");
+						Display plugin = (Display) loadedClass.newInstance();
 						plugins.add(plugin);
 					} catch (Exception e) {
 						e.printStackTrace();
