@@ -22,6 +22,7 @@ public class MainPanel extends JPanel {
 	private StatusPanel statusPanel;
 	private Color panelColor = new Color(0xE6E6E6);
 	private ArrayList<Display> plugins;
+	private Display activePlugin;
 
 	public MainPanel() {
 		// set up main frame
@@ -85,6 +86,8 @@ public class MainPanel extends JPanel {
 	}
 
 	public void removePluginExecution() {
+		if(this.activePlugin != null)
+			postStatus(this.activePlugin.getName(), this.activePlugin.getPluginRemovalMessage());
 		this.execPanel.removeAll();
 		repaintAll();
 	}
@@ -92,7 +95,7 @@ public class MainPanel extends JPanel {
 	public void executePlugin(Display plugin) {
 		postStatus(plugin.getName(), plugin.getExecutingMessage());
 		this.execPanel.add(plugin.getComponent());
-
+		this.activePlugin = plugin;
 		repaintAll();
 	}
 
